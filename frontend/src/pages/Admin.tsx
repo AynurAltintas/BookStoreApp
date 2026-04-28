@@ -46,6 +46,10 @@ interface MonthlySalesPoint {
 }
 
 const MONTH_LABELS = ['Oca', 'Sub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Agu', 'Eyl', 'Eki', 'Kas', 'Ara'];
+const currencyFormatter = new Intl.NumberFormat('tr-TR', {
+  style: 'currency',
+  currency: 'TRY',
+});
 
 const seededRandom = (seed: number) => {
   const value = Math.sin(seed) * 10000;
@@ -73,6 +77,10 @@ const Admin = () => {
   const yearlySalesData = useMemo(() => {
     const now = new Date();
     const totalSales = books.reduce((total, book) => total + Number(book.salesCount || 0), 0);
+    const totalRevenue = books.reduce(
+      (total, book) => total + Number(book.price || 0) * Number(book.salesCount || 0),
+      0,
+    );
     const aprilGrowth = Math.max(totalSales - seedSalesTotal, 0);
     const seedBooks = books.filter((book) => Number(book.salesCount || 0) > 0);
     const seedBase = seedBooks.reduce((seed, book) => seed + book.id * (book.salesCount + book.title.length), 13);
@@ -135,6 +143,7 @@ const Admin = () => {
       points,
       maxValue,
       yearTotal,
+      yearRevenue: totalRevenue,
       currentMonthSales: aprilGrowth,
       yTicks,
       currentMonthLabel,
@@ -444,6 +453,7 @@ const Admin = () => {
         </div>
         <div className="sales-summary">
           <span>Yillik toplam: {yearlySalesData.yearTotal}</span>
+          <span>Yillik gelir: {currencyFormatter.format(yearlySalesData.yearRevenue)}</span>
           <span>{yearlySalesData.currentMonthLabel}: {yearlySalesData.currentMonthSales}</span>
         </div>
         {isLoadingData ? <p className="sales-chart-loading">Grafik verileri yükleniyor...</p> : null}
