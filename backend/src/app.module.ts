@@ -9,14 +9,13 @@ import { AppService } from './app.service';
   imports: [
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: 'bookstore.sqlite', // Proje dizininde oluşacak dosya
-      autoLoadEntities: true, // Entity'leri otomatik yükler
+      database: 'bookstore.sqlite', 
+      autoLoadEntities: true,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true, // Geliştirme aşamasında tabloları otomatik oluşturur
+      synchronize: true, 
     }),
     BooksModule,
     AuthModule,
-    // Birazdan buraya Auth ve Books modüllerini ekleyeceğiz
   ],
   controllers: [AppController],
   providers: [AppService],

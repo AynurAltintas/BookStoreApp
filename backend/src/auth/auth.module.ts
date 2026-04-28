@@ -9,12 +9,12 @@ import { User } from './user.entity';
   imports: [
     TypeOrmModule.forFeature([User]),
     JwtModule.register({
-      secret: 'gizli-anahtar-123', // Temsili secret
+      secret: 'gizli-anahtar-123', 
       signOptions: { expiresIn: '1h' },
     }),
   ],
   controllers: [AuthController],
   providers: [AuthService],
-  exports: [AuthService], // Diğer modüllerde de kullanabilmek için
+  exports: [AuthService],
 })
 export class AuthModule {}

@@ -5,10 +5,8 @@ import { AuthService } from './auth/auth.service';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
-  // CORS'u aktif et (Frontend'in erişebilmesi için şart)
   app.enableCors();
   
-  // Uygulama başlarken Admin hesabını otomatik oluştur
   const authService = app.get(AuthService);
   await authService.createInitialAdmin();
   

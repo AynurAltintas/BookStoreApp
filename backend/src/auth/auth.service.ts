@@ -14,7 +14,6 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  // Giriş Yapma
   async login(email: string, pass: string) {
     const user = await this.userRepository.findOne({ where: { email } });
     
@@ -29,7 +28,6 @@ export class AuthService {
     };
   }
 
-  // Yeni Kullanıcı Kaydı
   async register(email: string, pass: string) {
     const existingUser = await this.userRepository.findOne({ where: { email } });
     if (existingUser) {
@@ -46,22 +44,17 @@ export class AuthService {
     return { message: 'Başarıyla kayıt oldunuz!' };
   }
 
-  // Kullanıcı Veritabanını JSON Dosyasından Sıfırlama
   async resetUsers() {
     try {
-      // 1. Tabloyu tamamen temizle
       await this.userRepository.clear();
 
-      // 2. SQLite sequence sayacını sıfırla
       const tableName = this.userRepository.metadata.tableName;
       await this.userRepository.query('DELETE FROM sqlite_sequence WHERE name = ?', [tableName]);
 
-      // 3. Seed dosyasını oku
       const filePath = path.join(process.cwd(), 'data', 'users-seed.json');
       const fileContent = fs.readFileSync(filePath, 'utf8');
       const seedUsers = JSON.parse(fileContent);
 
-      // 4. Kullanıcıları tekrar ekle
       await this.userRepository.save(seedUsers);
 
       console.log('Kullanıcı veritabanı ve ID sayacı sıfırlandı!');
@@ -72,21 +65,17 @@ export class AuthService {
     }
   }
 
-  // Uygulama ilk açıldığında çalışacak admin kontrolü
   async createInitialAdmin() {
     const adminExists = await this.userRepository.findOne({ where: { role: 'admin' } });
     if (!adminExists) {
-      // Eğer veritabanı boşsa resetUsers() fonksiyonunu çağırarak JSON'dan doldurabiliriz
       await this.resetUsers();
     }
   }
 
-  // Tüm Kullanıcıları Listeleme (Admin Paneli İçin)
   async findAllUsers() {
     return this.userRepository.find();
   }
 
-  // Belirli Bir Kullanıcıyı Silme
   async deleteUser(id: number) {
     const user = await this.userRepository.findOne({ where: { id } });
     if (!user) {

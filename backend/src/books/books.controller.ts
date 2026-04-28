@@ -10,7 +10,7 @@ export class BooksController {
         return this.booksService.create(createData);
     }
     
-    @Get() // Frontend buraya istek atıyor
+    @Get() 
     findAll() {
         return this.booksService.findAll();
     }
@@ -20,7 +20,7 @@ export class BooksController {
         return { totalSales: this.booksService.getSeedSalesTotal() };
     }
 
-    @Put(':id') // Frontend buraya istek 
+    @Put(':id') 
     update(@Param('id') id: string, @Body() updateData: any) {
         return this.booksService.update(+id, updateData);
     }

@@ -25,7 +25,6 @@ export class BooksService implements OnModuleInit {
     return this.readSeedBooks().reduce((total, book) => total + Number(book.salesCount || 0), 0);
   }
 
-  // Uygulama her başladığında veritabanı boşsa JSON'dan verileri yükler
   async onModuleInit() {
     const count = await this.bookRepository.count();
     if (count === 0) {
@@ -35,17 +34,13 @@ export class BooksService implements OnModuleInit {
 
   async resetDatabase() {
     try {
-      // 1. Önce mevcut tüm kitapları temizler
       await this.bookRepository.clear();
 
-      // 2. SQLite sequence sayacını sıfırla
       const tableName = this.bookRepository.metadata.tableName;
       await this.bookRepository.query('DELETE FROM sqlite_sequence WHERE name = ?', [tableName]);
 
-      // 3. JSON dosyasının yolunu belirle (backend/data/books-seed.json)
       const initialBooks = this.readSeedBooks();
 
-      // 4. JSON'dan gelen kitapları veritabanına kaydet
       await this.bookRepository.save(initialBooks);
 
       console.log('Kitap veritabanı JSON dosyasından başarıyla sıfırlandı!');
@@ -56,13 +51,11 @@ export class BooksService implements OnModuleInit {
     }
   }
 
-  // Belirli bir kitabı günceller (Admin için)
   async update(id: number, updateData: Partial<Book>) {
     await this.bookRepository.update(id, updateData);
     return this.bookRepository.findOne({ where: { id } });
   }
 
-  // Belirli bir kitabı siler (Admin için)
   async delete(id: number) {
     const book = await this.bookRepository.findOne({ where: { id } });
     if (!book) {
@@ -72,7 +65,6 @@ export class BooksService implements OnModuleInit {
     return { message: 'Kitap başarıyla silindi.' };
   }
 
-  // Yeni kitap ekler (Admin için)
   async create(bookData: Partial<Book>) {
     const title = String(bookData.title ?? '').trim();
     const author = String(bookData.author ?? '').trim();
@@ -100,7 +92,6 @@ export class BooksService implements OnModuleInit {
     return this.bookRepository.save(newBook);
   }
 
-  // Satış işlemini simüle eder (Kullanıcı için)
   async purchase(id: number) {
     const book = await this.bookRepository.findOne({ where: { id } });
     if (book && book.stock > 0) {
@@ -111,7 +102,6 @@ export class BooksService implements OnModuleInit {
     throw new Error('Stok yetersiz!');
   }
 
-  // Tüm kitapları getirir
   findAll() {
     return this.bookRepository.find();
   }

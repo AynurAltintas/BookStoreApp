@@ -7,7 +7,6 @@ export class AuthController {
 
   @Post('login')
   async login(@Body() body: any) {
-    // Frontend'den gelen email ve password'ü alıp service'e gönderiyoruz
     return this.authService.login(body.email, body.password);
   }
   @Post('register')
@@ -15,7 +14,6 @@ export class AuthController {
     return this.authService.register(body.email, body.password);
  }
 
-  // Eğer istersen manuel admin oluşturmak için bir endpoint (opsiyonel)
   @Post('setup')
   async setup() {
     await this.authService.createInitialAdmin();
@@ -31,7 +29,6 @@ async findAll() {
     return this.authService.deleteUser(+id);
   }
   
-  // auth.controller.ts
 @Post('reset')
 async reset() {
   return this.authService.resetUsers();
