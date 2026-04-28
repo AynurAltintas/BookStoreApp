@@ -1,0 +1,6 @@
+[
+  {"name": "admin", "email": "admin@kitap.com", "password": "123", "role": "admin"},
+  {"name": "Ahmet Yılmaz", "email": "ahmet.yilmaz@gmail.com", "password": "1234", "role": "user"},
+  {"name": "Ayşe Demir", "email": "ayse.demir@gmail.com", "password": "1234", "role": "user"},
+  {"name": "Elif Arslan", "email": "elif.arslan@gmail.com", "password": "1234", "role": "user"}
+]
